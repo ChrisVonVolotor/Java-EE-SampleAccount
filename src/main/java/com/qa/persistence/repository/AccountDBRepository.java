@@ -24,13 +24,11 @@ public class AccountDBRepository implements AccountRepository {
 
 	private static final Logger LOGGER = Logger.getLogger(AccountService.class);
 
-	
 	@PersistenceContext(unitName = "primary")
 	private EntityManager manager;
 	@Inject
 	private JSONUtil util;
 
-	
 	public String getAllAccounts() {
 		Query query = manager.createQuery("Select a FROM Account a");
 		Collection<Account> accounts = (Collection<Account>) query.getResultList();
@@ -54,38 +52,36 @@ public class AccountDBRepository implements AccountRepository {
 		LOGGER.info("AccountDBRepository: updateAccount");
 		try {
 			if (updatedAccount != null) {
-				if(updatedAccount.getFirstName() == null) {
+				if (updatedAccount.getFirstName() == null) {
 					LOGGER.warn("First Name Not Included in PUT from Database");
 					updatedAccount.setFirstName(accountFromDB.getFirstName());
 				}
-				if(updatedAccount.getSecondName() == null) {
+				if (updatedAccount.getSecondName() == null) {
 					LOGGER.warn("Second Name Not Included in PUT from Database");
 
 					updatedAccount.setSecondName(accountFromDB.getSecondName());
 				}
-				if(updatedAccount.getTransaction() == null) {
+				if (updatedAccount.getTransaction() == null) {
 					LOGGER.info("Transactions Not Included in PUT from Database");
 
 					updatedAccount.setTransaction(accountFromDB.getTransaction());
 				}
-				if(updatedAccount.getId() == null) {
+				if (updatedAccount.getId() == null) {
 					LOGGER.info("ID Not Included in PUT from Database");
 
 					updatedAccount.setId(accountFromDB.getId());
 				}
-				if(updatedAccount.getAccountNumber() == null) {
+				if (updatedAccount.getAccountNumber() == null) {
 					LOGGER.warn("Account Number Not Included in PUT from Database");
 					updatedAccount.setAccountNumber(accountFromDB.getAccountNumber());
 				}
 				accountFromDB = updatedAccount;
 				manager.merge(accountFromDB);
-			}else {
-
 			}
 		} catch (Exception e) {
 			LOGGER.error("AccountDBRepository: updateAccount NO JSON STRING");
 		}
-		
+
 		return "{\"message\": \"account sucessfully updated\"}";
 	}
 
